@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zunder Licensing</title>
+<style>
+  :root{
+    --bg:#12040f; --card:#1c0a18; --panel:#241026; --line:#3a1a35;
+    --txt:#f2e9f1; --dim:#a88aa3; --accent:#e2419f; --accent2:#8b5cf6;
+    --ok:#3fbf6f; --warn:#e0b34a;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;background:
+    radial-gradient(900px 500px at 50% -10%, #4b0f3d 0%, transparent 60%),
+    radial-gradient(700px 400px at 100% 100%, #2a1050 0%, transparent 55%),
+    var(--bg);
+    color:var(--txt);font-family:"Segoe UI",system-ui,sans-serif}
+  .wrap{max-width:980px;margin:0 auto;padding:32px 20px 80px}
+  h1{font-weight:300;letter-spacing:.35em;font-size:22px;text-align:center;margin:0 0 4px}
+  .sub{text-align:center;color:var(--dim);font-size:12px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:28px}
+  .card{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(0,0,0,.25));
+    border:1px solid var(--line);border-radius:16px;padding:22px;backdrop-filter:blur(6px)}
+  label{display:block;font-size:12px;color:var(--dim);margin:0 0 6px;letter-spacing:.08em;text-transform:uppercase}
+  input[type=text],input[type=password],input[type=number]{
+    width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);
+    background:rgba(0,0,0,.35);color:var(--txt);font-size:14px;outline:none}
+  input:focus{border-color:var(--accent2)}
+  .row{display:grid;grid-template-columns:1fr 140px 190px;gap:12px}
+  .row2{display:grid;grid-template-columns:1fr;gap:12px;margin-top:12px}
+  @media(max-width:720px){.row{grid-template-columns:1fr}}
+  button{cursor:pointer;border:0;border-radius:12px;padding:12px 18px;font-size:14px;
+    background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-weight:600}
+  button.ghost{background:rgba(255,255,255,.06);border:1px solid var(--line);color:var(--txt);font-weight:500}
+  button.small{padding:7px 12px;font-size:12px;border-radius:9px}
+  .muted{color:var(--dim);font-size:12px}
+  .hidden{display:none!important}
+  .keybox{margin-top:16px;background:rgba(0,0,0,.45);border:1px dashed var(--line);
+    border-radius:12px;padding:14px;word-break:break-all;font-family:Consolas,monospace;font-size:12.5px;line-height:1.6}
+  .err{color:#ff8a8a;font-size:13px;margin-top:10px;min-height:18px}
+  table{width:100%;border-collapse:collapse;margin-top:14px;font-size:13px}
+  th{color:var(--dim);text-align:left;font-weight:500;font-size:11px;text-transform:uppercase;
+    letter-spacing:.08em;padding:8px 10px;border-bottom:1px solid var(--line)}
+  td{padding:10px;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:middle}
+  .chip{display:inline-block;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:600}
+  .on{background:rgba(63,191,111,.15);color:var(--ok)}
+  .off{background:rgba(224,179,74,.15);color:var(--warn)}
+  .dead{background:rgba(255,255,255,.08);color:var(--dim)}
+  .keycell{max-width:340px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    font-family:Consolas,monospace;color:var(--dim)}
+  .totals{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px}
+  .stat{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:12px;padding:10px 14px;font-size:12px;color:var(--dim)}
+  .stat b{color:var(--txt);font-size:16px;display:block;margin-top:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>ZUNDER</h1>
+  <div class="sub">Licensing Panel</div>
+
+  <!-- LOGIN -->
+  <div id="loginCard" class="card" style="max-width:420px;margin:0 auto">
+    <label>Senha de administrador</label>
+    <input id="pw" type="password" placeholder="••••••••" autocomplete="current-password">
+    <div class="row2"><button id="loginBtn">Entrar</button></div>
+    <div id="loginErr" class="err"></div>
+  </div>
+
+  <!-- PANEL -->
+  <div id="panel" class="hidden">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+        <div>
+          <div class="muted">Gerar licenca</div>
+          <div class="totals" id="stats"></div>
+        </div>
+        <button id="logoutBtn" class="ghost small">Sair</button>
+      </div>
+
+      <div class="row" style="margin-top:18px">
+        <div>
+          <label>Cliente</label>
+          <input id="name" type="text" placeholder="Nome do cliente">
+        </div>
+        <div>
+          <label>Dias</label>
+          <input id="days" type="number" value="30" min="1" max="3650">
+        </div>
+        <div>
+          <label>HWID do cliente</label>
+          <input id="hwid" type="text" placeholder="AABB-CCDD-EEFF">
+        </div>
+      </div>
+      <div style="margin-top:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <label style="margin:0;display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;color:var(--txt);font-size:13px">
+          <input id="any" type="checkbox" style="width:16px;height:16px;accent-color:#e2419f"> Qualquer maquina (sem HWID)
+        </label>
+        <button id="genBtn">Gerar licenca</button>
+      </div>
+      <div id="genErr" class="err"></div>
+      <div id="keyOut" class="keybox hidden"></div>
+    </div>
+
+    <div class="card" style="margin-top:18px">
+      <div class="muted" style="margin-bottom:6px">Licencas emitidas</div>
+      <div style="overflow:auto">
+        <table>
+          <thead>
+            <tr><th>Cliente</th><th>HWID</th><th>Criada</th><th>Expira</th><th>Status</th><th>Chave</th><th></th></tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+
+async function api(url, opts) {
+  const r = await fetch(url, Object.assign({ headers: { 'Content-Type': 'application/json' } }, opts || {}));
+  let j = null;
+  try { j = await r.json(); } catch {}
+  return { status: r.status, body: j };
+}
+
+function fmt(ts) {
+  const d = new Date(ts * 1000);
+  return d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+}
+function statusOf(l) {
+  if (l.revoked) return '<span class="chip off">revogada</span>';
+  if (l.expiry * 1000 < Date.now()) return '<span class="chip dead">expirada</span>';
+  return '<span class="chip on">ativa</span>';
+}
+
+async function loadList() {
+  const { status, body } = await api('/api/licenses');
+  if (status !== 200) { showLogin(); return; }
+  const list = body.licenses || [];
+  const now = Date.now() / 1000;
+  const active = list.filter(l => !l.revoked && l.expiry > now).length;
+  $('stats').innerHTML =
+    '<div class="stat">Total<b>' + list.length + '</b></div>' +
+    '<div class="stat">Ativas<b>' + active + '</b></div>' +
+    '<div class="stat">Revogadas<b>' + list.filter(l => l.revoked).length + '</b></div>';
+
+  $('rows').innerHTML = list.map(l => `
+    <tr>
+      <td>${escapeHtml(l.name)}</td>
+      <td class="muted">${l.hwid === '*' ? 'qualquer' : escapeHtml(l.hwid)}</td>
+      <td class="muted">${fmt(l.created)}</td>
+      <td class="muted">${fmt(l.expiry)}</td>
+      <td>${statusOf(l)}</td>
+      <td><div class="keycell" title="${escapeHtml(l.key)}">${escapeHtml(l.key)}</div></td>
+      <td style="white-space:nowrap">
+        <button class="ghost small" data-copy="${escapeHtml(l.key)}">Copiar</button>
+        <button class="ghost small" data-revoke="${l.id}" data-state="${l.revoked}">${l.revoked ? 'Restaurar' : 'Revogar'}</button>
+      </td>
+    </tr>`).join('');
+
+  document.querySelectorAll('[data-copy]').forEach(b => b.onclick = async () => {
+    try { await navigator.clipboard.writeText(b.getAttribute('data-copy')); b.textContent = 'Copiado!'; }
+    catch { prompt('Copie a chave:', b.getAttribute('data-copy')); }
+    setTimeout(() => b.textContent = 'Copiar', 1200);
+  });
+  document.querySelectorAll('[data-revoke]').forEach(b => b.onclick = async () => {
+    const revoked = b.getAttribute('data-state') !== 'true';
+    await api('/api/licenses/' + b.getAttribute('data-revoke') + '/revoke',
+      { method: 'POST', body: JSON.stringify({ revoked }) });
+    loadList();
+  });
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+function showLogin() {
+  $('panel').classList.add('hidden');
+  $('loginCard').classList.remove('hidden');
+}
+function showPanel() {
+  $('loginCard').classList.add('hidden');
+  $('panel').classList.remove('hidden');
+  loadList();
+}
+
+$('loginBtn').onclick = async () => {
+  $('loginErr').textContent = '';
+  const { status, body } = await api('/api/login', {
+    method: 'POST', body: JSON.stringify({ password: $('pw').value })
+  });
+  if (status === 200) { $('pw').value = ''; showPanel(); }
+  else $('loginErr').textContent = (body && body.error) || 'Erro ao entrar';
+};
+$('pw').addEventListener('keydown', e => { if (e.key === 'Enter') $('loginBtn').click(); });
+
+$('logoutBtn').onclick = async () => { await api('/api/logout', { method: 'POST' }); showLogin(); };
+
+$('any').onchange = () => { $('hwid').disabled = $('any').checked; };
+
+$('genBtn').onclick = async () => {
+  $('genErr').textContent = '';
+  $('keyOut').classList.add('hidden');
+  const { status, body } = await api('/api/licenses', {
+    method: 'POST',
+    body: JSON.stringify({
+      name: $('name').value,
+      days: parseInt($('days').value, 10),
+      hwid: $('hwid').value,
+      any: $('any').checked,
+    })
+  });
+  if (status !== 200) { $('genErr').textContent = (body && body.error) || 'Erro ao gerar'; return; }
+  const l = body.license;
+  $('keyOut').classList.remove('hidden');
+  $('keyOut').textContent = l.key;
+  $('name').value = '';
+  loadList();
+};
+
+(async () => {
+  const { status } = await api('/api/me');
+  if (status === 200) showPanel(); else showLogin();
+})();
+</script>
+</body>
+</html>
